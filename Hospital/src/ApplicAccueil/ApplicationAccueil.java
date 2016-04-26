@@ -5,10 +5,18 @@
  */
 package ApplicAccueil;
 import Login.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -24,14 +32,18 @@ public class ApplicationAccueil extends javax.swing.JFrame {
     private NetworkBasicClient client = new NetworkBasicClient("localhost", 4800);
     
     private DefaultComboBoxModel MedecinsModel = new DefaultComboBoxModel();
-    private ArrayList<Medecin> MedecinsListe = new ArrayList<>();
+    private ArrayList<Medecin> MedecinsListe;
     private ArrayList<Consultation> ConsultationListe = new ArrayList<>();
+    private int port;
     
     public ApplicationAccueil() {
+      
         DialLogin login = new DialLogin(this, true);
         login.setVisible(true);
         
         initComponents();
+        initContainers();
+        
         
         GenreGroup.add(MeRadio);
         GenreGroup.add(MrRadio);
@@ -353,7 +365,109 @@ public class ApplicationAccueil extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private void initContainers()
+    {
+        String DirectoryPath = System.getProperty("user.dir");
+        File dossier = new File(DirectoryPath + System.getProperty("file.separator")+"HospitalInpres");
+        System.out.print(dossier);
+        if(!dossier.exists())
+        {
+            try
+            {
+                dossier.mkdir();
+            }
+            catch(SecurityException e)
+            {
+                System.err.println("Impossible de créer le répertoire de l'application : "+ e.getMessage());
+                System.exit(0);
+            }                   
+        }
+        
+        DirectoryPath = DirectoryPath + System.getProperty("file.separator") + "HospitalInpres";
+        
+        /*Fichier properties*/
+        String pathProperties = DirectoryPath + System.getProperty("file.separator") + "Hospital.properties";
+        Properties paramCo = new Properties();
+        
+        try
+        {
+            FileInputStream Oread = new FileInputStream(pathProperties);
+            paramCo.load(Oread);
+        }
+        catch(FileNotFoundException ex)
+        {
+            try 
+            {
+                FileOutputStream Oflux = new FileOutputStream(pathProperties);
+                
+                paramCo.setProperty("FichierPatient", "patients.dat");
+                paramCo.setProperty("FichierMedecin", "medecins.dat");
+                paramCo.setProperty("FichierUser", "users.csv");
+                paramCo.setProperty("Port", "50010");
+                paramCo.setProperty("Log", "log.txt");
+            
+                try {
+                    paramCo.store(Oflux, null);
+                }
+                catch (IOException ex1) {
+                    JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
+                    System.exit(0);
+                }
+            } 
+            catch (FileNotFoundException ex1) 
+            {
+                JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
+                System.exit(0);
+            }
+            
+        }
+        catch(IOException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Erreur:"+ex.getMessage());
+            System.exit(0);
+        }
+        
+        port = Integer.parseInt(paramCo.getProperty("Port"));
+        
+        /*Lecture des quais dans le port*/
+        String FichierMedecin = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierMedecin");
+        
+        try 
+        {
+            FileInputStream fis = new FileInputStream(FichierMedecin);
+            ObjectInputStream LectureMedecin = new ObjectInputStream(fis);
+            
+            MedecinsListe = (ArrayList<Medecin>)LectureMedecin.readObject();
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            MedecinsListe = new ArrayList<>();
+        
+            try 
+            {
+                FileOutputStream fos = new FileOutputStream(FichierMedecin);
+                ObjectOutputStream EcritureFichier = new ObjectOutputStream(fos);
+                
+                EcritureFichier.writeObject(MedecinsListe);
+            } 
+            catch (FileNotFoundException ex1) 
+            {
+                JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
+                System.exit(0);
+            }
+            catch (IOException ex1)
+            {
+                JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
+                System.exit(0);
+            }
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(this, "Erreur:"+e.getMessage());
+            System.exit(0);
+        }
+        
+    }
     private void AddMedecinMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMedecinMenuActionPerformed
         
         MedecinsAjouter nouvMedecinDialog = new MedecinsAjouter(this, true);
