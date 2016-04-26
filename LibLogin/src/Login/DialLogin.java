@@ -38,6 +38,7 @@ public class DialLogin extends java.awt.Dialog {
         label1 = new java.awt.Label();
         label2 = new java.awt.Label();
 
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
