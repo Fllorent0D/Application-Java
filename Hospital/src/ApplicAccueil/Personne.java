@@ -15,4 +15,29 @@ public class Personne {
     protected String adresse;
     protected String telephone;
     protected String datenaissance;
+    
+    public String getNom()
+    {
+        return nom;
+    }
+    
+    public String getPrenom()
+    {
+        return prenom;
+    }
+    
+    public String getAdresse()
+    {
+        return adresse;
+    }
+    
+    public String getTelephone()
+    {
+        return telephone;
+    }
+    
+    public String getDateNaissance()
+    {
+        return datenaissance;
+    }
 }

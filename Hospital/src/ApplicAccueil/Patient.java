@@ -13,7 +13,7 @@ public class Patient extends Public implements Identifiable{
     private String ONSS;
     public Patient(String nom, String prenom, String adresse, String telephone, String ONSS, String datenaissance)
     {
-        this.nom = nom;;
+        this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
         this.telephone = telephone;
@@ -22,7 +22,7 @@ public class Patient extends Public implements Identifiable{
     }
     public String getId()
     {
-        return "a";
+        return ONSS;
     }
     @Override
     public String toString()

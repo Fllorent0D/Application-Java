@@ -35,5 +35,8 @@ public class Medecin extends PersonnelMedical{
     {
         return "Dr. " + this.nom;
     }
-
+    public String getId()
+    {
+        return INAMI + nom;
+    }
 }

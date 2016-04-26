@@ -25,6 +25,18 @@ public class Consultation {
     {
         return "Consultation de " + patient + " avec " + medecin;
     }
+    public Medecin getMedecin()
+    {
+        return medecin;
+    }
+    public Patient getPatient()
+    {
+        return patient;
+    }
+    public String getDate()
+    {
+        return date;
+    }
     
     
 }

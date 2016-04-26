@@ -11,5 +11,8 @@ package ApplicAccueil;
  */
 abstract public class PersonnelHopital extends Personne implements Utilisateur {
     protected String matricule;
-    
+    String getMatricule()
+    {
+        return matricule;
+    }
 }

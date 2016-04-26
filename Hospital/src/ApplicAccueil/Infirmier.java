@@ -13,4 +13,19 @@ public class Infirmier extends PersonnelHopital{
     private String specialite;
     private String service;
     
+    public Infirmier(String spec, String ser)
+    {
+        specialite = spec;
+        service = ser;
+    }
+    
+    public String getSpecialite()
+    {
+        return specialite;
+    }
+    
+    public String getService()
+    {
+        return service;
+    }
 }

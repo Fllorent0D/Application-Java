@@ -55,6 +55,11 @@ public class DialLogin extends java.awt.Dialog {
         });
 
         button2.setLabel("Annuler");
+        button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button2ActionPerformed(evt);
+            }
+        });
 
         pwdTextField.setName("pwdTextField"); // NOI18N
 
@@ -132,6 +137,11 @@ public class DialLogin extends java.awt.Dialog {
             dispose();
         }
     }//GEN-LAST:event_ConnexionActionPerformed
+
+    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_button2ActionPerformed
 
     /**
      * @param args the command line arguments

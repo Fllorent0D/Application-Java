@@ -11,4 +11,8 @@ package ApplicAccueil;
  */
 public class PersonnelMedical extends PersonnelHopital {
     protected String INAMI;
+    String getINAMI()
+    {
+        return INAMI;
+    }
 }
