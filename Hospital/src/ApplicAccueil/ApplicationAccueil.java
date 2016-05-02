@@ -554,7 +554,7 @@ public class ApplicationAccueil extends javax.swing.JFrame {
     }//GEN-LAST:event_ConsultationRadioActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        MedecinsLister listerMedecinDialog = new MedecinsLister(this, true, MedecinsListe);
+        MedecinsLister listerMedecinDialog = new MedecinsLister(this, true);
         listerMedecinDialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -579,7 +579,10 @@ public class ApplicationAccueil extends javax.swing.JFrame {
         Date mnt = new Date();
         heureLabel.setText(DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,Locale.FRANCE).format(mnt));
     }//GEN-LAST:event_heureBtnActionPerformed
-
+    public ArrayList<Medecin> getMedecins()
+    {
+        return MedecinsListe;
+    }
     /**
      * @param args the command line arguments
      */

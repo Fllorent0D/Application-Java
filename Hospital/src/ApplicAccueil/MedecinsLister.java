@@ -21,10 +21,12 @@ public class MedecinsLister extends javax.swing.JDialog {
     private DefaultTableModel tableModel = new DefaultTableModel(col, 0);
     /**
      * Creates new form MedecinsLister
+     * @param parent fenetre parent JFrame
+     * @param modal  Fenetre modal
      */
-    public MedecinsLister(java.awt.Frame parent, boolean modal, ArrayList<Medecin> Liste) {
+    public MedecinsLister(ApplicationAccueil parent, boolean modal) {
         super(parent, modal);
-            
+        ArrayList<Medecin> Liste = parent.getMedecins();
         initComponents();
         tableMedecins.setModel(tableModel);
         for (int i = 0; i < Liste.size(); i++){
@@ -114,19 +116,8 @@ public class MedecinsLister extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
-        /*
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                MedecinsLister dialog = new MedecinsLister(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });*/
+        
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
