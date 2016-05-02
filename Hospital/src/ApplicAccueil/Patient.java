@@ -11,9 +11,12 @@ package ApplicAccueil;
  */
 public class Patient extends Public implements Identifiable{
     private String ONSS;
-    public Patient(String nom, String prenom, String adresse, String telephone, String ONSS, String datenaissance)
+    public Patient(String nom, String prenom, String adresse, String telephone, String ONSS, String datenaissance) throws PatientMissingException
     {
-        this.nom = nom;
+        if(nom.length() == 0)
+            throw new PatientMissingException("Veuillez rentrer le nom du patient");
+        else
+            this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
         this.telephone = telephone;

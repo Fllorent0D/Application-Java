@@ -478,6 +478,7 @@ public class ApplicationAccueil extends javax.swing.JFrame {
 
     private void SauverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SauverButtonActionPerformed
         Consultation nouvelleConsultation = null;
+        
         try {
             nouvelleConsultation = addConsultation();
         } catch (PatientMissingException ex) {
@@ -518,18 +519,13 @@ public class ApplicationAccueil extends javax.swing.JFrame {
     }//GEN-LAST:event_SauverButtonActionPerformed
     private Consultation addConsultation() throws PatientMissingException, DoctorMissingException
     {
-        if(pNomTextfield.getText().length() == 0)
-        {
-            throw new PatientMissingException("Le nom du patient est manquant");
-        }
-        
         Patient newPatient = new Patient(pNomTextfield.getText(), pPrenomTextfield.getText(), pAdresseTextfield.getText(), "0787" ,"ONSS" ,pNaissanceTextfield.getText()); 
+        s
         if(MedecinsListe.contains(MedecinsModel.getSelectedItem()))
         {
             Medecin med = MedecinsListe.get(MedecinsListe.indexOf(MedecinsModel.getSelectedItem()));
             Consultation newConsult = new Consultation(med, newPatient, "Test");
-            return newConsult;
-            
+            return newConsult;       
         }
         else
         {

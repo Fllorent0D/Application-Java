@@ -32,8 +32,8 @@ abstract public class VerifyPasswordClassic extends Validate implements Verify {
     }
     public boolean verify(String l, String p) throws UnknownLoginPasswordException, InvalidLoginPasswordException, PasswordNotFoundException 
     {
-        System.out.println(l);
-        System.out.println(p);
+        //System.out.println(l);
+        //System.out.println(p);
 
         if(l.length() == 0 || p.length() == 0)
             throw new UnknownLoginPasswordException("Votre login ou votre mot de passe est manquant.");
