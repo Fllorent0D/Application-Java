@@ -31,6 +31,7 @@ import javax.swing.text.StyledDocument;
 import network.NetworkBasicClient;
 import ClassMetiers.*;
 import static java.lang.System.out;
+import java.util.Iterator;
 /**
  *
  * @author florentcardoen
@@ -42,6 +43,11 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     private ArrayList<Medecin> MedecinsListe;
     private ArrayList<Consultation> ConsultationListe = new ArrayList<>();
     private int port;
+    private String FichierMedecins;
+    private String DirectoryPath;
+    private Properties paramCo;
+    
+    
     
     public ApplicationAccueil() {
       
@@ -368,7 +374,9 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
     private void initContainers()
     {
-        String DirectoryPath = System.getProperty("user.dir");
+        DirectoryPath = System.getProperty("user.dir");
+        String pathProperties;
+
         File dossier = new File(DirectoryPath + System.getProperty("file.separator")+"HospitalInpres");
         System.out.print(dossier);
         if(!dossier.exists())
@@ -387,8 +395,8 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         DirectoryPath = DirectoryPath + System.getProperty("file.separator") + "HospitalInpres";
         
         /*Fichier properties*/
-        String pathProperties = DirectoryPath + System.getProperty("file.separator") + "Hospital.properties";
-        Properties paramCo = new Properties();
+        pathProperties = DirectoryPath + System.getProperty("file.separator") + "Hospital.properties";
+        paramCo = new Properties();
         
         try
         {
@@ -430,12 +438,12 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         
         port = Integer.parseInt(paramCo.getProperty("Port"));
         
-        /*Lecture des quais dans le port*/
-        String FichierMedecin = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierMedecin");
+        /*Lecture des médecins*/
+        FichierMedecins = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierMedecin");
         
         try 
         {
-            FileInputStream fis = new FileInputStream(FichierMedecin);
+            FileInputStream fis = new FileInputStream(FichierMedecins);
             ObjectInputStream LectureMedecin = new ObjectInputStream(fis);
             
             MedecinsListe = (ArrayList<Medecin>)LectureMedecin.readObject();
@@ -443,31 +451,43 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         catch (FileNotFoundException ex) 
         {
             MedecinsListe = new ArrayList<>();
-        
-            try 
-            {
-                FileOutputStream fos = new FileOutputStream(FichierMedecin);
-                ObjectOutputStream EcritureFichier = new ObjectOutputStream(fos);
-                
-                EcritureFichier.writeObject(MedecinsListe);
-            } 
-            catch (FileNotFoundException ex1) 
-            {
-                JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
-                System.exit(0);
-            }
-            catch (IOException ex1)
-            {
-                JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
-                System.exit(0);
-            }
+            updateFileMedecins();
         }
         catch(IOException | ClassNotFoundException e)
         {
             JOptionPane.showMessageDialog(this, "Erreur:"+e.getMessage());
             System.exit(0);
         }
+        for(Iterator<Medecin> iter = MedecinsListe.iterator(); iter.hasNext(); )
+        {
+            Medecin med = iter.next();
+            System.out.println(med);
+            MedecinsModel.addElement(med);
+           
+        }
+          
+    }
+    private void updateFileMedecins()
+    {
+        FichierMedecins = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierMedecin");
         
+        try 
+        {
+            FileOutputStream fos = new FileOutputStream(FichierMedecins);
+            ObjectOutputStream EcritureFichier = new ObjectOutputStream(fos);
+
+            EcritureFichier.writeObject(MedecinsListe);
+        } 
+        catch (FileNotFoundException ex1) 
+        {
+            JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
+            System.exit(0);
+        }
+        catch (IOException ex1)
+        {
+            JOptionPane.showMessageDialog(this, "Erreur:"+ex1.getMessage());
+            System.exit(0);
+        }
     }
     private void AddMedecinMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMedecinMenuActionPerformed
         
@@ -475,6 +495,7 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         nouvMedecinDialog.setVisible(true);
         MedecinsListe.add(nouvMedecinDialog.getNouveauMedecin());
         MedecinsModel.addElement(nouvMedecinDialog.getNouveauMedecin());
+        updateFileMedecins();
     }//GEN-LAST:event_AddMedecinMenuActionPerformed
 
     private void SauverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SauverButtonActionPerformed

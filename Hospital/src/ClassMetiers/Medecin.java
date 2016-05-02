@@ -7,13 +7,13 @@ package ClassMetiers;
  */
 
 
-import javax.swing.JTextField;
+import java.io.Serializable;
 
 /**
  *
  * @author florentcardoen
  */
-public class Medecin extends PersonnelMedical{
+public class Medecin extends PersonnelMedical implements Serializable {
     private String specialite;
     private String service;
     
