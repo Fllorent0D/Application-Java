@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 package ApplicAccueil;
+import ClassMetiers.DoctorMissingException;
+import ClassMetiers.Medecin;
+import ClassMetiers.Patient;
+import ClassMetiers.PatientMissingException;
+import ClassMetiers.Consultation;
 import Login.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import network.NetworkBasicClient;
+import ClassMetiers.*;
 /**
  *
  * @author florentcardoen
@@ -520,7 +526,7 @@ public class ApplicationAccueil extends javax.swing.JFrame {
     private Consultation addConsultation() throws PatientMissingException, DoctorMissingException
     {
         Patient newPatient = new Patient(pNomTextfield.getText(), pPrenomTextfield.getText(), pAdresseTextfield.getText(), "0787" ,"ONSS" ,pNaissanceTextfield.getText()); 
-        s
+        
         if(MedecinsListe.contains(MedecinsModel.getSelectedItem()))
         {
             Medecin med = MedecinsListe.get(MedecinsListe.indexOf(MedecinsModel.getSelectedItem()));

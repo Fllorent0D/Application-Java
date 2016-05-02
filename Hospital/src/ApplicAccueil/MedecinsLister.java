@@ -5,10 +5,11 @@
  */
 package ApplicAccueil;
 
+import ClassMetiers.Medecin;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
-
+import ClassMetiers.*;
 /**
  *
  * @author florentcardoen
@@ -28,14 +29,14 @@ public class MedecinsLister extends javax.swing.JDialog {
         tableMedecins.setModel(tableModel);
         for (int i = 0; i < Liste.size(); i++){
             Object data[] = {
-              Liste.get(i).nom,
-              Liste.get(i).prenom,
-              Liste.get(i).adresse,
-              Liste.get(i).telephone,
-              Liste.get(i).INAMI,
-              Liste.get(i).service,
-              Liste.get(i).specialite,
-              Liste.get(i).matricule,
+              Liste.get(i).getNom(),
+              Liste.get(i).getPrenom(),
+              Liste.get(i).getAdresse(),
+              Liste.get(i).getTelephone(),
+              Liste.get(i).getINAMI(),
+              Liste.get(i).getService(),
+              Liste.get(i).getSpecialite(),
+              Liste.get(i).getMatricule(),
             };
             tableModel.addRow(data);
         }
