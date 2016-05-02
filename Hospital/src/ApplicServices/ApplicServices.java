@@ -34,10 +34,10 @@ public class ApplicServices extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         messageRecuTextfield = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        medecinField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        patientField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,13 +56,13 @@ public class ApplicServices extends javax.swing.JFrame {
 
         jButton3.setText("Prévenir médecin");
 
-        jTextField2.setText("jTextField2");
+        medecinField.setText("jTextField2");
 
         jLabel1.setText("Médecin");
 
         jLabel2.setText("Patient");
 
-        jTextField3.setText("jTextField2");
+        patientField.setText("jTextField2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,8 +84,8 @@ public class ApplicServices extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                            .addComponent(jTextField3)))))
+                            .addComponent(medecinField, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                            .addComponent(patientField)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,11 +102,11 @@ public class ApplicServices extends javax.swing.JFrame {
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medecinField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addContainerGap(87, Short.MAX_VALUE))
         );
@@ -116,9 +116,12 @@ public class ApplicServices extends javax.swing.JFrame {
 
     private void lireMessageBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lireMessageBtnActionPerformed
         String messageRecu = server.getMessage();
-        if(messageRecu == "RIEN")
+        if(messageRecu != "RIEN")
         {
-            messageRecuTextfield.setText(messageRecu);
+            String [] messagePart = messageRecu.split("/");
+            messageRecuTextfield.setText(messagePart[0]);
+            medecinField.setText(messagePart[1]);
+            patientField.setText(messagePart[2]);
         }
     }//GEN-LAST:event_lireMessageBtnActionPerformed
 
@@ -163,9 +166,9 @@ public class ApplicServices extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JButton lireMessageBtn;
+    private javax.swing.JTextField medecinField;
     private javax.swing.JTextField messageRecuTextfield;
+    private javax.swing.JTextField patientField;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,5 +1,7 @@
 package ClassMetiers;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,7 +13,7 @@ package ClassMetiers;
  *
  * @author florentcardoen
  */
-public final class Consultation {
+public final class Consultation implements Serializable {
     private String date;
     private Medecin medecin;
     private Patient patient;
@@ -22,6 +24,11 @@ public final class Consultation {
         setMedecin(med);
         setPatient(pat);
     }
+    public String stringMessage()
+    {
+        return this.toString() + '/'+ getMedecin().getNom() + '/'+ getPatient().getNom() ;
+    }
+    
     @Override
     public String toString()
     {

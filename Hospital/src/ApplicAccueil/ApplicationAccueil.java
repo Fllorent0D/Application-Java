@@ -30,13 +30,14 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import network.NetworkBasicClient;
 import ClassMetiers.*;
+import static java.lang.System.out;
 /**
  *
  * @author florentcardoen
  */
-public class ApplicationAccueil extends javax.swing.JFrame {
+public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     private NetworkBasicClient client = new NetworkBasicClient("localhost", 4800);
-    
+    private Thread threadClock = null;
     private DefaultComboBoxModel MedecinsModel = new DefaultComboBoxModel();
     private ArrayList<Medecin> MedecinsListe;
     private ArrayList<Consultation> ConsultationListe = new ArrayList<>();
@@ -62,7 +63,12 @@ public class ApplicationAccueil extends javax.swing.JFrame {
         MedecinsCombo.setSelectedIndex(0);
         
         heureLabel.setText("");
-    }
+        if (threadClock == null) 
+        {
+            threadClock = new Thread(this, "Clock");
+            threadClock.start();
+        }
+ }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -97,7 +103,6 @@ public class ApplicationAccueil extends javax.swing.JFrame {
         ActionsRealisees = new javax.swing.JTextPane();
         MedecinsCombo = new javax.swing.JComboBox<>();
         SauverButton = new javax.swing.JButton();
-        heureBtn = new javax.swing.JButton();
         heureLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -190,13 +195,6 @@ public class ApplicationAccueil extends javax.swing.JFrame {
             }
         });
 
-        heureBtn.setText("Quelle heure?");
-        heureBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                heureBtnActionPerformed(evt);
-            }
-        });
-
         heureLabel.setText("jLabel10");
 
         jMenu1.setText("Patients");
@@ -261,7 +259,29 @@ public class ApplicationAccueil extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(MrRadio)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(MeRadio))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(pAdresseTextfield)
+                                        .addComponent(pNaissanceTextfield)
+                                        .addComponent(pPrenomTextfield)
+                                        .addComponent(pNomTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(MedecinsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -280,50 +300,25 @@ public class ApplicationAccueil extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(jCheckBox1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(MrRadio)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(MeRadio)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(pAdresseTextfield)
-                                            .addComponent(pNaissanceTextfield)
-                                            .addComponent(pPrenomTextfield)
-                                            .addComponent(pNomTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(heureLabel))))
-                            .addComponent(MedecinsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(heureBtn)))
-                .addContainerGap())
+                        .addComponent(heureLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(heureBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(heureLabel)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(pNomTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(heureLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(pNomTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -362,7 +357,7 @@ public class ApplicationAccueil extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(SauverButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
@@ -519,7 +514,8 @@ public class ApplicationAccueil extends javax.swing.JFrame {
         } catch (BadLocationException ex) {
             Logger.getLogger(ApplicationAccueil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        client.sendStringWithoutWaiting(nouvelleConsultation.toString());
+
+        client.sendStringWithoutWaiting(nouvelleConsultation.stringMessage());
         
       
     }//GEN-LAST:event_SauverButtonActionPerformed
@@ -573,12 +569,6 @@ public class ApplicationAccueil extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(null,"Cette application est réalisée par Florent Cardoen."); 
 
     }//GEN-LAST:event_AboutBtnActionPerformed
-
-    private void heureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heureBtnActionPerformed
-        // TODO add your handling code here:
-        Date mnt = new Date();
-        heureLabel.setText(DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,Locale.FRANCE).format(mnt));
-    }//GEN-LAST:event_heureBtnActionPerformed
     public ArrayList<Medecin> getMedecins()
     {
         return MedecinsListe;
@@ -634,7 +624,6 @@ public class ApplicationAccueil extends javax.swing.JFrame {
     private javax.swing.JRadioButton MrRadio;
     private javax.swing.ButtonGroup ObjetGroup;
     private javax.swing.JButton SauverButton;
-    private javax.swing.JButton heureBtn;
     private javax.swing.JLabel heureLabel;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
@@ -663,4 +652,18 @@ public class ApplicationAccueil extends javax.swing.JFrame {
     private javax.swing.JTextField pPrenomTextfield;
     private javax.swing.JMenuItem pourDebutantBtn;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() 
+    {
+    Thread myThread = Thread.currentThread();
+        while (threadClock == myThread) {
+            Date mnt = new Date();
+            heureLabel.setText(DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,Locale.FRANCE).format(mnt));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e){
+            }
+        }
+    }
 }
