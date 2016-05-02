@@ -1,5 +1,7 @@
 package ClassMetiers;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,7 +13,7 @@ package ClassMetiers;
  *
  * @author florentcardoen
  */
-public class Personne {
+public class Personne implements Serializable {
     private String nom;
     private String prenom;
     private String adresse;

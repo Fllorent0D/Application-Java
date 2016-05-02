@@ -475,8 +475,16 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         {
             FileOutputStream fos = new FileOutputStream(FichierMedecins);
             ObjectOutputStream EcritureFichier = new ObjectOutputStream(fos);
-
+        for(Iterator<Medecin> iter = MedecinsListe.iterator(); iter.hasNext(); )
+        {
+            Medecin med = iter.next();
+            System.out.println(med);
+            //edecinsModel.addElement(med);
+           
+        }
             EcritureFichier.writeObject(MedecinsListe);
+            EcritureFichier.flush();
+
         } 
         catch (FileNotFoundException ex1) 
         {
