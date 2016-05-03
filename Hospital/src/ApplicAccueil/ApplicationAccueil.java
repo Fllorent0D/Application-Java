@@ -42,8 +42,11 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     private DefaultComboBoxModel MedecinsModel = new DefaultComboBoxModel();
     private ArrayList<Medecin> MedecinsListe;
     private ArrayList<Consultation> ConsultationListe = new ArrayList<>();
+    private ArrayList<Patient> PatientListe;
     private int port;
     private String FichierMedecins;
+    private String FichierPatient;
+
     private String DirectoryPath;
     private Properties paramCo;
     
@@ -112,6 +115,7 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         heureLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        menuPatientLister = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         AddMedecinMenu = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -204,6 +208,15 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         heureLabel.setText("jLabel10");
 
         jMenu1.setText("Patients");
+
+        menuPatientLister.setText("Lister");
+        menuPatientLister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPatientListerActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuPatientLister);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Médecins");
@@ -440,7 +453,6 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         
         /*Lecture des médecins*/
         FichierMedecins = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierMedecin");
-        
         try 
         {
             FileInputStream fis = new FileInputStream(FichierMedecins);
@@ -451,38 +463,64 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         catch (FileNotFoundException ex) 
         {
             MedecinsListe = new ArrayList<>();
-            updateFileMedecins();
+            updateFile("Medecin");
         }
         catch(IOException | ClassNotFoundException e)
         {
             JOptionPane.showMessageDialog(this, "Erreur:"+e.getMessage());
             System.exit(0);
         }
+        
         for(Iterator<Medecin> iter = MedecinsListe.iterator(); iter.hasNext(); )
         {
             Medecin med = iter.next();
-            System.out.println(med);
             MedecinsModel.addElement(med);
-           
         }
+        
+        /* Patients */
+        FichierPatient = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierPatient");
+        try 
+        {
+            FileInputStream fis = new FileInputStream(FichierPatient);
+            ObjectInputStream LecturePatient = new ObjectInputStream(fis);
+            
+            PatientListe = (ArrayList<Patient>)LecturePatient.readObject();
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            PatientListe = new ArrayList<>();
+            updateFile("Patient");
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(this, "Erreur:"+e.getMessage());
+            System.exit(0);
+        }
+       
+        
+        
+        
+        
           
     }
-    private void updateFileMedecins()
+    private void updateFile(String fichier)
     {
-        FichierMedecins = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierMedecin");
+        String Fichier = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("Fichier"+fichier);
         
         try 
         {
-            FileOutputStream fos = new FileOutputStream(FichierMedecins);
+            FileOutputStream fos = new FileOutputStream(Fichier);
             ObjectOutputStream EcritureFichier = new ObjectOutputStream(fos);
-        for(Iterator<Medecin> iter = MedecinsListe.iterator(); iter.hasNext(); )
-        {
-            Medecin med = iter.next();
-            System.out.println(med);
-            //edecinsModel.addElement(med);
-           
-        }
-            EcritureFichier.writeObject(MedecinsListe);
+            
+            switch(fichier)
+            {
+                case "Patient":
+                    EcritureFichier.writeObject(PatientListe);
+                    break;
+                case "Medecin":
+                    EcritureFichier.writeObject(MedecinsListe);
+                    break;
+            }
             EcritureFichier.flush();
 
         } 
@@ -497,20 +535,47 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
             System.exit(0);
         }
     }
+    
     private void AddMedecinMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMedecinMenuActionPerformed
         
         MedecinsAjouter nouvMedecinDialog = new MedecinsAjouter(this, true);
         nouvMedecinDialog.setVisible(true);
         MedecinsListe.add(nouvMedecinDialog.getNouveauMedecin());
         MedecinsModel.addElement(nouvMedecinDialog.getNouveauMedecin());
-        updateFileMedecins();
+        updateFile("Medecin");
     }//GEN-LAST:event_AddMedecinMenuActionPerformed
 
     private void SauverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SauverButtonActionPerformed
         Consultation nouvelleConsultation = null;
         
         try {
-            nouvelleConsultation = addConsultation();
+            Patient newPatient = new Patient(pNomTextfield.getText(), pPrenomTextfield.getText(), pAdresseTextfield.getText(), "0787" ,"ONSS" ,pNaissanceTextfield.getText()); 
+            if(MedecinsListe.contains(MedecinsModel.getSelectedItem()))
+            {
+                Medecin med = MedecinsListe.get(MedecinsListe.indexOf(MedecinsModel.getSelectedItem()));
+                Consultation newConsult = new Consultation(med, newPatient, "Test");
+                nouvelleConsultation = newConsult;       
+            }
+            else
+            {
+                throw new DoctorMissingException("Le nom du médecin est manquant");
+            }
+            
+            for(Iterator<Patient> iter = PatientListe.iterator(); iter.hasNext(); )
+            {
+                Patient pat = iter.next();
+                if(pat.equals(newPatient))
+                    throw new PatientAlreadyRegistered("Le patient est déjà encodé");
+            }
+            PatientListe.add(newPatient);
+            updateFile("Patient");
+            
+            StyledDocument document = (StyledDocument) ActionsRealisees.getDocument();
+            document.insertString(document.getLength(), nouvelleConsultation.toString(), null);
+            
+            client.sendStringWithoutWaiting(nouvelleConsultation.stringMessage());
+        
+            
         } catch (PatientMissingException ex) {
             Object[] possibilities = {"Simple oubli", "Pas de carte d'identité"};
             String erreur = (String)JOptionPane.showInputDialog(
@@ -535,34 +600,19 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
                     "ok");
             System.out.println("Il s'agit d'une consultation de "+ pNomTextfield.getText() +"\nCause de l'erreur : " + erreur);
             return;
-        }
-         
-        StyledDocument document = (StyledDocument) ActionsRealisees.getDocument();
-        try {
-            document.insertString(document.getLength(), nouvelleConsultation.toString(), null);
-        } catch (BadLocationException ex) {
+        } catch (PatientAlreadyRegistered ex) {
+            JOptionPane.showMessageDialog(this,
+                ex.getMessage(),
+                "Erreur",
+                JOptionPane.ERROR_MESSAGE);
+            } catch (BadLocationException ex) {
             Logger.getLogger(ApplicationAccueil.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        client.sendStringWithoutWaiting(nouvelleConsultation.stringMessage());
+         
         
       
     }//GEN-LAST:event_SauverButtonActionPerformed
-    private Consultation addConsultation() throws PatientMissingException, DoctorMissingException
-    {
-        Patient newPatient = new Patient(pNomTextfield.getText(), pPrenomTextfield.getText(), pAdresseTextfield.getText(), "0787" ,"ONSS" ,pNaissanceTextfield.getText()); 
-        
-        if(MedecinsListe.contains(MedecinsModel.getSelectedItem()))
-        {
-            Medecin med = MedecinsListe.get(MedecinsListe.indexOf(MedecinsModel.getSelectedItem()));
-            Consultation newConsult = new Consultation(med, newPatient, "Test");
-            return newConsult;       
-        }
-        else
-        {
-            throw new DoctorMissingException("Le nom du médecin est manquant");
-        }
-    }
+
 
 
 /**
@@ -598,11 +648,21 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         javax.swing.JOptionPane.showMessageDialog(null,"Cette application est réalisée par Florent Cardoen."); 
 
     }//GEN-LAST:event_AboutBtnActionPerformed
+
+    private void menuPatientListerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPatientListerActionPerformed
+        PatientsLister dial = new PatientsLister(this, false);
+        dial.setVisible(true);
+    }//GEN-LAST:event_menuPatientListerActionPerformed
     public ArrayList<Medecin> getMedecins()
     {
         return MedecinsListe;
     }
+    public ArrayList<Patient> getPatients()
+    {
+        return PatientListe;
+    }     
     /**
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -675,6 +735,7 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JMenuItem menuPatientLister;
     private javax.swing.JTextField pAdresseTextfield;
     private javax.swing.JTextField pNaissanceTextfield;
     private javax.swing.JTextField pNomTextfield;

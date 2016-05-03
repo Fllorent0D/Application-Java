@@ -44,6 +44,18 @@ public class Patient extends Public implements Identifiable{
     @Override
     public String toString()
     {
+        
         return getNom() + " " + getPrenom();
+    }
+
+    public boolean equals(Patient o) 
+    {
+        return (getNom().equals(o.getNom()) && 
+                getPrenom().equals(o.getPrenom()) &&
+                getAdresse().equals(o.getAdresse()) && 
+                getDateNaissance().equals(o.getDateNaissance()) &&
+                getTelephone().equals(o.getTelephone()) && 
+                getONSS().equals(o.getONSS())
+                );
     }
 }

@@ -26,13 +26,13 @@ public final class Consultation implements Serializable {
     }
     public String stringMessage()
     {
-        return this.toString() + '/'+ getMedecin().getNom() + '/'+ getPatient().getNom() ;
+        return this.toString() + '/'+ getMedecin().getNom() + '/'+ getPatient().getNom()  ;
     }
     
     @Override
     public String toString()
     {
-        return "Consultation de " + patient + " avec " + medecin;
+        return "Consultation de " + patient + " avec " + medecin + "\n"; 
     }
     public Medecin getMedecin()
     {
