@@ -15,18 +15,18 @@ import java.io.Serializable;
  */
 public final class Consultation implements Serializable {
     private String date;
-    private Medecin medecin;
-    private Patient patient;
+    private String medecin;
+    private String patient;
     
     public Consultation(Medecin med, Patient pat, String date)
     {
         setDate(date);
-        setMedecin(med);
-        setPatient(pat);
+        setMedecin(med.getINAMI());
+        setPatient(pat.getONSS());
     }
     public String stringMessage()
     {
-        return this.toString() + '/'+ getMedecin().getNom() + '/'+ getPatient().getNom()  ;
+        return this.toString() + '/'+ getMedecin() + '/'+ getPatient()  ;
     }
     
     @Override
@@ -34,11 +34,11 @@ public final class Consultation implements Serializable {
     {
         return "Consultation de " + patient + " avec " + medecin + "\n"; 
     }
-    public Medecin getMedecin()
+    public String getMedecin()
     {
         return medecin;
     }
-    public Patient getPatient()
+    public String getPatient()
     {
         return patient;
     }
@@ -50,12 +50,12 @@ public final class Consultation implements Serializable {
     {
         date = d;
     }
-    public void setMedecin(Medecin m)
+    public void setMedecin(String m)
     {
         medecin = m;
     }
     
-    public void setPatient(Patient p)
+    public void setPatient(String p)
     {
         patient = p;
     }

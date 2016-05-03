@@ -40,13 +40,13 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     private NetworkBasicClient client = new NetworkBasicClient("localhost", 4800);
     private Thread threadClock = null;
     private DefaultComboBoxModel MedecinsModel = new DefaultComboBoxModel();
-    private ArrayList<Medecin> MedecinsListe;
+    private ArrayList<Medecin> MedecinListe;
     private ArrayList<Consultation> ConsultationListe = new ArrayList<>();
     private ArrayList<Patient> PatientListe;
     private int port;
     private String FichierMedecins;
     private String FichierPatient;
-
+    private String FichierConsultation;
     private String DirectoryPath;
     private Properties paramCo;
     
@@ -424,6 +424,8 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
                 
                 paramCo.setProperty("FichierPatient", "patients.dat");
                 paramCo.setProperty("FichierMedecin", "medecins.dat");
+                paramCo.setProperty("FichierConsultation", "consultations.dat");
+
                 paramCo.setProperty("FichierUser", "users.csv");
                 paramCo.setProperty("Port", "50010");
                 paramCo.setProperty("Log", "log.txt");
@@ -458,11 +460,11 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
             FileInputStream fis = new FileInputStream(FichierMedecins);
             ObjectInputStream LectureMedecin = new ObjectInputStream(fis);
             
-            MedecinsListe = (ArrayList<Medecin>)LectureMedecin.readObject();
+            MedecinListe = (ArrayList<Medecin>)LectureMedecin.readObject();
         } 
         catch (FileNotFoundException ex) 
         {
-            MedecinsListe = new ArrayList<>();
+            MedecinListe = new ArrayList<>();
             updateFile("Medecin");
         }
         catch(IOException | ClassNotFoundException e)
@@ -471,7 +473,7 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
             System.exit(0);
         }
         
-        for(Iterator<Medecin> iter = MedecinsListe.iterator(); iter.hasNext(); )
+        for(Iterator<Medecin> iter = MedecinListe.iterator(); iter.hasNext(); )
         {
             Medecin med = iter.next();
             MedecinsModel.addElement(med);
@@ -498,14 +500,43 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         }
        
         
-        
+        FichierConsultation = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("FichierConsultation");
+        try 
+        {
+            FileInputStream fis = new FileInputStream(FichierConsultation);
+            ObjectInputStream LectureConsultation = new ObjectInputStream(fis);
+            
+            ConsultationListe = (ArrayList<Consultation>)LectureConsultation.readObject();
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            ConsultationListe = new ArrayList<>();
+            updateFile("Consultation");
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(this, "Erreur:"+e.getMessage());
+            System.exit(0);
+        }
         
         
           
     }
     private void updateFile(String fichier)
     {
-        String Fichier = DirectoryPath + System.getProperty("file.separator") + paramCo.getProperty("Fichier"+fichier);
+        String Fichier = FichierPatient;
+        switch(fichier)
+        {
+            case "Patient":
+                Fichier = FichierPatient;
+                break;
+            case "Medecin":
+                Fichier = FichierMedecins;
+                break;
+            case "Consultation":
+                Fichier = FichierConsultation;
+                break;
+        }
         
         try 
         {
@@ -518,7 +549,10 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
                     EcritureFichier.writeObject(PatientListe);
                     break;
                 case "Medecin":
-                    EcritureFichier.writeObject(MedecinsListe);
+                    EcritureFichier.writeObject(MedecinListe);
+                    break;
+                case "Consultation":
+                    EcritureFichier.writeObject(ConsultationListe);
                     break;
             }
             EcritureFichier.flush();
@@ -540,21 +574,19 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
         
         MedecinsAjouter nouvMedecinDialog = new MedecinsAjouter(this, true);
         nouvMedecinDialog.setVisible(true);
-        MedecinsListe.add(nouvMedecinDialog.getNouveauMedecin());
+        MedecinListe.add(nouvMedecinDialog.getNouveauMedecin());
         MedecinsModel.addElement(nouvMedecinDialog.getNouveauMedecin());
         updateFile("Medecin");
     }//GEN-LAST:event_AddMedecinMenuActionPerformed
 
     private void SauverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SauverButtonActionPerformed
-        Consultation nouvelleConsultation = null;
         
+        Medecin med;
         try {
             Patient newPatient = new Patient(pNomTextfield.getText(), pPrenomTextfield.getText(), pAdresseTextfield.getText(), "0787" ,"ONSS" ,pNaissanceTextfield.getText()); 
-            if(MedecinsListe.contains(MedecinsModel.getSelectedItem()))
+            if(MedecinListe.contains(MedecinsModel.getSelectedItem()))
             {
-                Medecin med = MedecinsListe.get(MedecinsListe.indexOf(MedecinsModel.getSelectedItem()));
-                Consultation newConsult = new Consultation(med, newPatient, "Test");
-                nouvelleConsultation = newConsult;       
+                med = MedecinListe.get(MedecinListe.indexOf(MedecinsModel.getSelectedItem()));
             }
             else
             {
@@ -567,13 +599,19 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
                 if(pat.equals(newPatient))
                     throw new PatientAlreadyRegistered("Le patient est déjà encodé");
             }
+            Consultation newConsult = new Consultation(med, newPatient, "Test");    
+            
             PatientListe.add(newPatient);
             updateFile("Patient");
             
-            StyledDocument document = (StyledDocument) ActionsRealisees.getDocument();
-            document.insertString(document.getLength(), nouvelleConsultation.toString(), null);
+            ConsultationListe.add(newConsult);
+            updateFile("Consultation");
             
-            client.sendStringWithoutWaiting(nouvelleConsultation.stringMessage());
+            
+            StyledDocument document = (StyledDocument) ActionsRealisees.getDocument();
+            document.insertString(document.getLength(), "Consultation de " + newPatient.getNom() + " chez " + med.toString(), null);
+            
+            client.sendStringWithoutWaiting(newConsult.stringMessage());
         
             
         } catch (PatientMissingException ex) {
@@ -655,7 +693,7 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_menuPatientListerActionPerformed
     public ArrayList<Medecin> getMedecins()
     {
-        return MedecinsListe;
+        return MedecinListe;
     }
     public ArrayList<Patient> getPatients()
     {
