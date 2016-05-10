@@ -3,16 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/PersonnelMedical.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Consultation.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Utilisateur.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Identifiable.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Medecin.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Infirmier.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Patient.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/Personne.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/PatientsLister.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Employe.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Personne.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Patient.java</file>
             <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/ApplicationAccueil.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/PersonnelHopital.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/MedecinsLister.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Consultation.java</file>
         </group>
     </open-files>
 </project-private>
