@@ -784,10 +784,10 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
     @Override
     public void run() 
     {
-    Thread myThread = Thread.currentThread();
+        Thread myThread = Thread.currentThread();
         while (threadClock == myThread) {
             Date mnt = new Date();
-            heureLabel.setText(DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,Locale.FRANCE).format(mnt));
+            heureLabel.setText(DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,Locale.KOREAN).format(mnt));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e){

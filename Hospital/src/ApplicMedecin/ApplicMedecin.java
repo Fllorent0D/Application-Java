@@ -16,37 +16,41 @@ public class ApplicMedecin {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ReceivingBean BeanRecei = null;
+        ReceivingBean Receive = null;
         try {
-            BeanRecei = (ReceivingBean) Beans.instantiate(null,"ApplicMedecin.ReceivingBean");
+            Receive = (ReceivingBean) Beans.instantiate(null,"ApplicMedecin.ReceivingBean");
         } catch (IOException ex) {
             Logger.getLogger(ApplicMedecin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ApplicMedecin.class.getName()).log(Level.SEVERE, null, ex);
         }
-        RecordBean BeanRecor = null;
+        RecordBean Record = null;
         try {
-            BeanRecor = (RecordBean) Beans.instantiate(null,"ApplicMedecin.RecordBean");
+            Record = (RecordBean) Beans.instantiate(null,"ApplicMedecin.RecordBean");
         } catch (IOException ex) {
             Logger.getLogger(ApplicMedecin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ApplicMedecin.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ChooseAnswerBean BeanChoose = null;
+        ChooseAnswerBean ChooseAnswer = null;
         try {
-            BeanChoose = (ChooseAnswerBean) Beans.instantiate(null,"ApplicMedecin.ChooseAnswerBean");
+            ChooseAnswer = (ChooseAnswerBean) Beans.instantiate(null,"ApplicMedecin.ChooseAnswerBean");
         } catch (IOException ex) {
             Logger.getLogger(ApplicMedecin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ApplicMedecin.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
-        BeanRecei.addPropertyChangeListener(BeanRecor);
-        BeanRecor.addAlertListener(BeanChoose);
+        //Connecter les beans
+        Receive.addPropertyChangeListener(Record);
+        Record.addAlertListener(ChooseAnswer);
+        ChooseAnswer.addAlertListener(Receive);
         
-        BeanRecei.setMedecinPatient("Florent/test");
         
+        //Receive.setMedecinPatient("Florent/test");
+        //Démarre la réception de messages
+        Receive.init();
+        Receive.run();
     }
     
 }

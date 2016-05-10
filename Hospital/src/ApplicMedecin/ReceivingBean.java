@@ -9,15 +9,17 @@ package ApplicMedecin;
 import java.beans.*;
 import java.util.*; 
 import java.io.*;
+import network.NetworkBasicServer;
 
 /**
  *
  * @author florentcardoen
  */
-public class ReceivingBean {
+public class ReceivingBean implements ReplyListener {
     protected PropertyChangeSupport GestProp = new PropertyChangeSupport(this);
     private String MedecinPatient;
-
+    private NetworkBasicServer server;
+    
     public ReceivingBean()
     {
         
@@ -36,4 +38,26 @@ public class ReceivingBean {
     {
         GestProp.removePropertyChangeListener(l);
     } 
+
+    @Override
+    public void replyDetected(ReplyEvent ev) {
+        server.sendMessage(ev.message);
+        
+    }
+    public void init()
+    {
+        server = new NetworkBasicServer(5000, null);
+        
+    }
+    public void run()
+    {
+        while(true)
+        {
+            String messageRecu = server.getMessage();
+            if(!messageRecu.equals("RIEN"))
+            {
+                setMedecinPatient(messageRecu);
+            }
+        }
+    }
 }
