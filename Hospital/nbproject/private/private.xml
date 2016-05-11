@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/PatientsLister.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Employe.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Personne.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Patient.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicMedecin/ApplicMedecin.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicMedecin/ChooseAnswerBean.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicMedecin/NeedAnswerEvent.java</file>
             <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/ApplicationAccueil.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicAccueil/MedecinsLister.java</file>
-            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ClassMetiers/Consultation.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicMedecin/RecordBean.java</file>
+            <file>file:/Users/florentcardoen/Documents/Application-Java/Application-Java/Hospital/src/ApplicMedecin/ReceivingBean.java</file>
         </group>
     </open-files>
 </project-private>

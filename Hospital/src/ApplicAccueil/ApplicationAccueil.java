@@ -610,8 +610,8 @@ public class ApplicationAccueil extends javax.swing.JFrame implements Runnable {
             
             StyledDocument document = (StyledDocument) ActionsRealisees.getDocument();
             document.insertString(document.getLength(), "Consultation de " + newPatient.getNom() + " chez " + med.toString(), null);
-            
-            client.sendStringWithoutWaiting(newConsult.stringMessage());
+            String message ="Consulatition de " + newPatient.getNom() + " chez " + med + "/" + med + "/"+newPatient.getNom();
+            client.sendStringWithoutWaiting(message);
         
             
         } catch (PatientMissingException ex) {

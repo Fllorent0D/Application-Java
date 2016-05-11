@@ -9,6 +9,8 @@ package ApplicMedecin;
 import java.beans.*;
 import java.util.*; 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import network.NetworkBasicServer;
 
 /**
@@ -53,10 +55,15 @@ public class ReceivingBean implements ReplyListener {
     {
         while(true)
         {
-            String messageRecu = server.getMessage();
-            if(!messageRecu.equals("RIEN"))
-            {
-                setMedecinPatient(messageRecu);
+            try {
+                Thread.sleep(1000);
+                String messageRecu = server.getMessage();
+                if(!messageRecu.equals("RIEN"))
+                {
+                    setMedecinPatient(messageRecu);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ReceivingBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
